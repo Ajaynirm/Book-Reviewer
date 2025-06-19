@@ -1,12 +1,15 @@
 import mysql from 'mysql2/promise';
-import { initDatabase } from './initialiseDB.js';
+import { configDotenv } from "dotenv";
+
+configDotenv();
+
 
 const pool = mysql.createPool({
-  host: 'mysql-26391384-book-reviewer.e.aivencloud.com',
-  user: 'avnadmin',
-  password: 'AVNS_VBEtTYSqKjffWdJ6g_u',
-  database: 'defaultdb',
-  port: 25206,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PWD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
   waitForConnections: true,
   connectionLimit: 10,
 });

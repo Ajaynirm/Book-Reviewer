@@ -4,10 +4,12 @@ import bookRoutes from './routes/bookRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import {pool} from "./config/db.js";
-import { initDatabase } from "./config/initialiseDB.js";
+import { configDotenv } from "dotenv";
+
+configDotenv();
 
 const app=express();
-const port=30300;
+const port=process.env.PORT;
 
 app.use(cors());
 app.use(express.json());

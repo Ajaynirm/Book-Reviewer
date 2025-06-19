@@ -31,3 +31,25 @@ export const createBook = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+export const searchBook = async (req, res) => {
+  const { search = '', page = 1 } = req.query;
+  const limit = 6;
+  const offset = (page - 1) * limit;
+
+  try {
+    const [books] = await pool.query(
+      `SELECT * FROM books WHERE title LIKE ? OR author LIKE ? LIMIT ? OFFSET ?`,
+      [`%${search}%`, `%${search}%`, limit, offset]
+    );
+
+    const [[{ count }]] = await pool.query(
+      `SELECT COUNT(*) as count FROM books WHERE title LIKE ? OR author LIKE ?`,
+      [`%${search}%`, `%${search}%`]
+    );
+
+    res.json({ books, totalPages: Math.ceil(count / limit) });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
