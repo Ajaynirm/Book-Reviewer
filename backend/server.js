@@ -1,10 +1,12 @@
 import express from "express";
+
 import cors from "cors";
 import bookRoutes from './routes/bookRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import {pool} from "./config/db.js";
 import { configDotenv } from "dotenv";
+import { authenticate } from "./middleware/Auth.Middleware.js";
 
 configDotenv();
 
@@ -19,10 +21,11 @@ app.use('/reviews', reviewRoutes);
 app.use('/users', userRoutes);
 
 
-app.get("/", (req, res) => {
+app.get("/", authenticate,(req, res) => {
     res.status(200).json({
       message: "📚 This is the root API",
-      from: req.ip
+      from: req.ip,
+      message: "Hello, " + req.user.uid 
     });
   });
   
